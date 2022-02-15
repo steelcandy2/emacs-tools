@@ -1,0 +1,9 @@
+#+title: emacs-tools
+#+date: <2022-02-15 Tue 11:25>
+#+description: README file for miscellaneous Emacs-related programs.
+
+This is a collection miscellaneous programs related to the use of the Emacs
+text editor. Currently it contains the following programs:
+
+  - =org-quick-tangle=: a quick and dirty sed script to tangle certain org
+    mode files ([[https://blog0.steelcandy.org/2022-02-12-quickly-tangling.html][blog post]])
