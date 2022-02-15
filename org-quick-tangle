@@ -1,0 +1,63 @@
+#!/usr/bin/env -S sed -nf
+# -*- eval: (read-only-mode 1) -*-
+## Tangles (that is, outputs to standard output) all of - and only - the
+## contents of the Emacs Org Mode source code blocks that are read from its
+## standard input, except those code blocks whose BEGIN_SRC lines include
+## ':tangle no'.
+#
+# Note: this is *not* a complete replacement for the actual Org Mode code
+# tangling functionality. For one thing we don't handle everything it does
+# (like noweb code references, for example).
+#
+# Aspects of the implementation - such as the use of labels in sed - are
+# based on code on page 635 of "Unix Power Tools, 2nd Edition" by Jerry Peek
+# et al.
+#
+# Copyright (C) 2019-2021 by James MacKay.
+#
+#-This program is free software: you can redistribute it and/or modify
+#-it under the terms of the GNU General Public License as published by
+#-the Free Software Foundation, either version 3 of the License, or
+#-(at your option) any later version.
+#
+#-This program is distributed in the hope that it will be useful,
+#-but WITHOUT ANY WARRANTY; without even the implied warranty of
+#-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#-GNU General Public License for more details.
+#
+#-You should have received a copy of the GNU General Public License
+#-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+# Don't output code blocks that have the ':tangle no' keyword
+/^[#][+][Bb][Ee][Gg][Ii][Nn]_[Ss][Rr][Cc].*:tangle[ ][ ]*no/,/^[#][+][Ee][Nn][Dd]_[Ss][Rr][Cc]/bend
+
+# Do output all other source code blocks.
+/^[#][+][Bb][Ee][Gg][Ii][Nn]_[Ss][Rr][Cc]/,/^[#][+][Ee][Nn][Dd]_[Ss][Rr][Cc]/{
+    # Well, except for the first and last (i.e. BEGIN_SRC and END_SRC) lines.
+    /^[#][+][Bb][Ee][Gg][Ii][Nn]_[Ss][Rr][Cc]/bend
+    /^[#][+][Ee][Nn][Dd]_[Ss][Rr][Cc]/bend
+
+    # Output any comment line that enables lexical binding (for the whole
+    # file or just individual functions).
+    #
+    # Note: this also causes the first line of the tangled file to be output:
+    # the one that makes the tangled file read-only (at least in Emacs).
+    /^;.*lexical-binding: t/p
+
+    # And to shorten the output, omit lines that just contain a comment. (The
+    # square brackets contain a space and a tab.) We don't omit blank lines
+    # since some of them may be in function docstrings (for example) where
+    # they're significant. (Lines in strings are wildly unlikely to start
+    # with underscores.)
+    #/^[     ]*$/bend
+    /^[     ]*;/bend
+
+    # Remove the comma that escapes a '*' at the start of a line (including
+    # when it and the comma are preceded by spaces).
+    s/^\([ ]*\),[*]/\1*/
+
+    p
+}
+
+:end
