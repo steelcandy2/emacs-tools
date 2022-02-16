@@ -7,3 +7,5 @@ text editor. Currently it contains the following programs:
 
   - =org-quick-tangle=: a quick and dirty sed script to tangle certain org
     mode files ([[https://blog0.steelcandy.org/2022-02-12-quickly-tangling.html][blog post]])
+  - =elisp=: has the current Emacs instance evaluate a sequence of Emacs
+    Lisp expressions

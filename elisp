@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# -*- eval: (read-only-mode 1) -*-
+## Runs a sequence of Emacs Lisp expressions in the currently-running Emacs
+## instance, outputting the results to standard output and exiting with a
+## zero exit code if successful, and exiting with a nonzero exit code
+## otherwise.
+#
+# Based heavily on code from:
+# https://gist.github.com/neeasade/5dbadb84b04c33885bc4fee50612ec5f
+#
+# See also: emacs-do.
+#
+# Copyright (C) 2018-2021 by James MacKay.
+#
+#-This program is free software: you can redistribute it and/or modify
+#-it under the terms of the GNU General Public License as published by
+#-the Free Software Foundation, either version 3 of the License, or
+#-(at your option) any later version.
+#
+#-This program is distributed in the hope that it will be useful,
+#-but WITHOUT ANY WARRANTY; without even the implied warranty of
+#-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#-GNU General Public License for more details.
+#
+#-You should have received a copy of the GNU General Public License
+#-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+rc=0
+
+readonly out="$(emacsclient --eval "(progn $@)")"
+if [ "$out" = "nil" ] || [ -z "$out" ]
+then
+    rc=1
+else
+    echo "$out"
+fi
+
+exit $rc
