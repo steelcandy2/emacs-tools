@@ -9,3 +9,5 @@ text editor. Currently it contains the following programs:
     mode files ([[https://blog0.steelcandy.org/2022-02-12-quickly-tangling.html][blog post]])
   - =elisp=: has the current Emacs instance evaluate a sequence of Emacs
     Lisp expressions
+  - =emacs-do=: has a selected Emacs instance evaluate an Emacs Lisp
+    expression
